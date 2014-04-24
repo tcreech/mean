@@ -34,8 +34,10 @@ int main(int argc, char **argv){
       meanfiles[i-1] = alloc_meanfile(argv[i]);
       meanfile *mf = meanfiles[i-1];
       while(read_word(mf->fd, word) == 1){
-         if(is_numeric(word))
-            mf->nums[mf->numcount++] = get_numeric(word);
+         if(is_numeric(word)){
+            add_num(mf, get_numeric(word));
+            fprintf(stderr, "read %d numerics.\n", mf->numcount);
+         }
       }
    }
 

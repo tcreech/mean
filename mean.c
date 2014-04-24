@@ -8,7 +8,7 @@
 #include <string.h>
 
 #define MAX_NUM_FILES 128
-#define NUMS_CHUNK_SIZE 128
+#define NUMS_CHUNK_SIZE 1024
 
 typedef struct {
    char *filename;

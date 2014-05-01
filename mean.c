@@ -36,7 +36,6 @@ int main(int argc, char **argv){
       while(read_word(mf->fd, word) == 1){
          if(is_numeric(word)){
             add_num(mf, get_numeric(word));
-            fprintf(stderr, "read %d numerics.\n", mf->numcount);
          }
       }
    }

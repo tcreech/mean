@@ -10,6 +10,16 @@
 #define MAX_NUM_FILES 128
 #define NUMS_CHUNK_SIZE 1024
 
+#define max(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+    __typeof__ (b) _b = (b); \
+    _a > _b ? _a : _b; })
+
+#define min(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+    __typeof__ (b) _b = (b); \
+    _a < _b ? _a : _b; })
+
 typedef struct {
    char *filename;
    double *nums;
@@ -51,14 +61,22 @@ int main(int argc, char **argv){
    }
 
    double *meannums = malloc(sizeof(double) * g_numcount);
+   double *minnums = malloc(sizeof(double) * g_numcount);
+   double *maxnums = malloc(sizeof(double) * g_numcount);
    for(unsigned i=0; i<g_numcount; i++){
       // We'll take the arithmetic mean.
       double sum = 0;
+      double g_min = meanfiles[0]->nums[i];
+      double g_max = meanfiles[0]->nums[i];
       for(unsigned j=0; j<num_mf; j++){
          sum += meanfiles[j]->nums[i];
+         g_min = min(g_min, meanfiles[j]->nums[i]);
+         g_max = max(g_max, meanfiles[j]->nums[i]);
       }
       double mean = sum / num_mf;
       meannums[i] = mean;
+      minnums[i]  = g_min;
+      maxnums[i]  = g_max;
    }
 
    // Using the first file as a model, spit back out the averaged file.
@@ -85,7 +103,14 @@ int main(int argc, char **argv){
             printf(" ");
 
          if(is_num){
-            printf("%0.3f", meannums[current_num++]);
+            char *mr_str = getenv("MEAN_REDUCTION");
+            if(mr_str && strcmp(mr_str, "min")==0){
+               printf("%0.3f", minnums[current_num++]);
+            }else if(mr_str && strcmp(mr_str, "max")==0){
+               printf("%0.3f", maxnums[current_num++]);
+            }else{
+               printf("%0.3f", meannums[current_num++]);
+            }
          }else{
             printf("%s", tmp);
          }

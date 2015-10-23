@@ -1,0 +1,2 @@
+This is a purpose-built tool for aggregating numbers in arbitrary files with both text and numbers in them.
+It should probably be replaced with a small awk script.
